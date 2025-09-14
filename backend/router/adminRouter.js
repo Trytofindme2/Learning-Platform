@@ -18,7 +18,7 @@ adminRouter.post('/register', [
             throw new Error('user account with this gmail already exited')
         }
     }), 
-    body('password').notEmpty().withMessage('pasasword need to provide'),
+    body('password').notEmpty().withMessage('pasasword need to provide').isLength({min :  6}).withMessage('password must be at least 6 characters long'),
     body('re-password').notEmpty().withMessage('password confirmation need to provide').custom((value,{req})=> {
         if(value !== req.body.password){
             throw new Error('password does not match')
@@ -31,7 +31,7 @@ adminRouter.post('/register', [
 
 adminRouter.post('/log-in' , [
     body('email').notEmpty().withMessage('email need to provide').bail(),
-    body('pasasword').notEmpty().withMessage('password need to provide'),
-])
+    body('password').notEmpty().withMessage('password need to provide'),
+] , expressValidator , adminController.login)
 
 module.exports = adminRouter;
