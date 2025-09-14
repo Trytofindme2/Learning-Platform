@@ -33,4 +33,6 @@ userRouter.post('/log-in' , [
 ] , expressValidator , userController.login)
 
 
+userRouter.patch('/addUserInfo/:id',userController.addUserInfo)
+
 module.exports = userRouter;

@@ -22,6 +22,7 @@
     id String @id @default(uuid())
     fullname String?
     nickname String?
+    birthday DateTime?
     email String @unique
     password String
     avatar String?

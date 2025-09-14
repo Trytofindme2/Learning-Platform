@@ -1,5 +1,6 @@
 const { PrismaClient } = require('../generated/prisma')
 const prisma = new PrismaClient();
+const convertDate = require('../helper/convertDate')
 const bcrypt = require('bcrypt')
 const hashGenerator = require('../helper/hashGenerator')
 
@@ -33,7 +34,24 @@ const userService = {
             throw new Error('password does not correct');
         }
         return exitUser;
-     }
+    },
+
+    addUserInfo : (id,info) => {
+        try {
+            const userInfo = prisma.student.update({
+                where : {
+                    id
+                },
+                data : {
+                    ...info,
+                    birthday : convertDate(info.birthday),
+                }
+            })
+            return userInfo
+        } catch (error) {
+            throw new Error(`cannot update ${error}`)
+        }
+    }
 }
 
 module.exports = userService;
