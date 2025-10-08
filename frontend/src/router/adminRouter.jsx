@@ -1,6 +1,7 @@
 import AdminLayout from "../layout/adminLayout"
 import Login from "../pages/admin/Login"
 
+
 const adminRouter = [
     {
         path : '/admin',

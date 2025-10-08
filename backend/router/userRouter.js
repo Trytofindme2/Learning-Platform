@@ -35,4 +35,6 @@ userRouter.post('/log-in' , [
 
 userRouter.patch('/addUserInfo/:id',userController.addUserInfo)
 
+userRouter.post('/google', userController.googleSignIn);
+
 module.exports = userRouter;

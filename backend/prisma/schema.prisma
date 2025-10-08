@@ -18,18 +18,20 @@
   }
 
 
-  model Student{
-    id String @id @default(uuid())
-    fullname String?
-    nickname String?
-    birthday DateTime?
-    email String @unique
-    password String
-    avatar String?
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    role Role @default(STUDENT)
-  }
+model Student {
+  id        String   @id @default(uuid())
+  fullname  String?
+  nickname  String?
+  birthday  DateTime?
+  email     String   @unique
+  password  String?  
+  googleId  String?  @unique
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  premium   String @default("Free User")
+  role      Role     @default(STUDENT)
+}
 
   enum Role {
     STUDENT

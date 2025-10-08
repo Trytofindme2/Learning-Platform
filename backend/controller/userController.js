@@ -30,6 +30,21 @@ const userController = {
         } catch (error) {
             res.status(500).json({errorMessage : error.message})
         }
+    },
+
+     googleSignIn: async (req, res) => {
+        try {
+            const { token } = req.body; // frontend sends Google JWT
+            const { user, appToken } = await userService.googleSignIn(token);
+
+            res.status(200).json({
+                msg: 'Google Sign-In success',
+                user,
+                token: appToken,
+            });
+        } catch (error) {
+            res.status(401).json({ errorMessage: error.message });
+        }
     }
 
     
