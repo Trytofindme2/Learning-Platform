@@ -34,4 +34,6 @@ adminRouter.post('/log-in' , [
     body('password').notEmpty().withMessage('password need to provide'),
 ] , expressValidator , adminController.login)
 
+adminRouter.post('/create-course', adminController.createCourse)
+
 module.exports = adminRouter;

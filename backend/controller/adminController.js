@@ -20,6 +20,15 @@ const adminController = {
        }catch(error){
             res.status(500).json({errorMessage : error.message})
        }
+    },
+
+    createCourse : async (req,res) => {
+        try {
+            const course = await adminService.createCourse(req.body);
+            res.status(200).json({msg : 'success' , course})
+        } catch (error) {
+            res.status(500).json({errorMessage : error.message})
+        }
     }
 }
 

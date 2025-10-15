@@ -1,12 +1,33 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import { userAPI } from '../../../api/API'
 import { useNavigate } from "react-router";
+import { AuthContext } from "../../../context/AuthContext";
 
 
 const Form = ({ closeFun }) => {
 
   const navigation = useNavigate();
+
+  const { dispatch } = useContext(AuthContext)
+
+  const [email,setemail] = useState();
+  const [password,setpassowrd] = useState();
+
+  const HandleOnLogIn = async (e) => {
+    e.preventDefault();
+    const data = { email , password }
+    try {
+      const response = await userAPI.post('log-in', data)
+      if(response.status === 200){
+        console.log(response.data);
+        dispatch({type : 'user-log-in' , payload : response.data })
+        closeFun()
+      }
+    } catch (error) {
+      console.log(error.response.data.errorMessage);
+    }
+  }
 
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
@@ -14,6 +35,8 @@ const Form = ({ closeFun }) => {
         token: credentialResponse.credential,
       });
       localStorage.setItem("token", data.token);
+      console.log(data.user);
+      dispatch({type : 'user-google-sign-in' , payload : data.user})
       navigation('/NeuroLingua/updateInfo/editProfile')
       closeFun(true)
     } catch (err) {
@@ -42,38 +65,39 @@ const Form = ({ closeFun }) => {
         Please sign in to continue
       </p>
 
-      <form className="mt-6 space-y-4">
+      <form onSubmit={HandleOnLogIn} className="mt-6 space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Email
           </label>
           <input
+            onChange={(e)=>setemail(e.target.value)}
             type="email"
             placeholder="you@example.com"
             className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
           />
         </div>
 
-        {/* Password */}
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Password
           </label>
           <input
             type="password"
+            onChange={(e)=>setpassowrd(e.target.value)}
             placeholder="••••••••"
             className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
           />
         </div>
 
-        {/* Forgot password */}
+
         <div className="text-right text-sm">
           <a href="#" className="text-indigo-600 hover:underline">
             Forgot password?
           </a>
         </div>
 
-        {/* Sign In button */}
+
         <button
           type="submit"
           className="w-full rounded-md bg-indigo-600 px-4 py-2 text-white font-medium hover:bg-indigo-700 transition"
@@ -82,14 +106,14 @@ const Form = ({ closeFun }) => {
         </button>
       </form>
 
-      {/* OR Divider */}
+
       <div className="my-6 flex items-center">
         <div className="flex-1 border-t border-gray-300"></div>
         <span className="px-3 text-sm text-gray-500">New to NeuroLingua?</span>
         <div className="flex-1 border-t border-gray-300"></div>
       </div>
 
-      {/* Google Sign-In */}
+
       <GoogleLogin
         onSuccess={handleGoogleSuccess}
         onError={handleGoogleError}

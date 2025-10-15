@@ -39,24 +39,40 @@ const userService = {
         return exitUser;
     },
 
-    addUserInfo : (id,info) => {
+    addUserInfo: async (id, info) => {
+    try {
+        const userInfo = await prisma.student.update({
+        where: { id },
+        data: {
+            ...info,
+            
+            birthday: info.birthday ? new Date(info.birthday) : null,
+        },
+        });
+        return userInfo;
+    } catch (error) {
+        throw new Error(`Cannot update user info: ${error}`);
+    }
+    },
+
+
+    addUserPassword : async (id,password) => {
         try {
-            const userInfo = prisma.student.update({
-                where : {
-                    id
-                },
-                data : {
-                    ...info,
-                    birthday : convertDate(info.birthday),
-                }
-            })
-            return userInfo
+            const hashPassword = await hashGenerator(password)
+            const userInfo = await prisma.student.update({
+            where: { id },
+            data: {
+            password : hashPassword
+            },
+        });
+        return userInfo;
         } catch (error) {
-            throw new Error(`cannot update ${error}`)
+            throw new Error(error)
         }
     },
 
-     googleSignIn: async (token) => {
+
+    googleSignIn: async (token) => {
         const ticket = await googleClient.verifyIdToken({
             idToken: token,
             audience: process.env.GOOGLE_CLIENT_ID,

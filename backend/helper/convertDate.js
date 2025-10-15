@@ -1,12 +1,19 @@
 const convertDate = (input) => {
-  if (!input) return null
+  if (!input) return null;
 
-  const parts = input.split("/")
-  if (parts.length !== 3) return null
+  // Accept YYYY-MM-DD format
+  const parts = input.includes("-") ? input.split("-") : input.split("/");
+  if (parts.length !== 3) return null;
 
-  const [day, month, year] = parts
-  if (!day || !month || !year) return null
+  let year, month, day;
 
-  return new Date(`${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}T00:00:00.000Z`)
+  if (input.includes("-")) {
+    [year, month, day] = parts;
+  } else {
+    [day, month, year] = parts;
+  }
+
+  return new Date(`${year}-${month.padStart(2,"0")}-${day.padStart(2,"0")}T00:00:00.000Z`);
 }
-module.exports = convertDate
+
+module.exports = convertDate;

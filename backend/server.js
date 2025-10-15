@@ -4,6 +4,7 @@ const cors = require('cors')
 const adminRouter = require('./router/adminRouter')
 const userRouter = require('./router/userRouter')
 const morgan = require('morgan')
+const cookieParser = require('cookie-parser')
 const server = express()
 
 
@@ -13,6 +14,8 @@ server.use(cors({
   origin: ["http://localhost:5173", "http://localhost:3000"],
   credentials: true,               
 }));
+
+server.use(cookieParser())
 
 server.use(express.json())
 

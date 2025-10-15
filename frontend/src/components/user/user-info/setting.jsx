@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 const Setting = () => {
   const [darkMode, setDarkMode] = useState(false);
 
-  // Apply or remove dark mode
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');

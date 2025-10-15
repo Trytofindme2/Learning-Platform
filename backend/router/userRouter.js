@@ -32,6 +32,15 @@ userRouter.post('/log-in' , [
     body('password').notEmpty().withMessage('password need to provide'),
 ] , expressValidator , userController.login)
 
+userRouter.put('/update-password/:id',[
+    body('re-password').notEmpty().withMessage('password confirmation need to provide').custom((value , {req}) => {
+        if(value !== req.body.password){
+            throw new Error('password does not match')
+        }
+        return true;
+    }),
+     body('password').notEmpty().withMessage('password needs to provide').isLength({min : 6}).withMessage('password must be at least 6 characters long')
+],expressValidator , userController.addUserPassword)
 
 userRouter.patch('/addUserInfo/:id',userController.addUserInfo)
 

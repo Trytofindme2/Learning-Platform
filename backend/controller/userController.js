@@ -1,4 +1,5 @@
 const userService = require('../service/userService')
+const tokeGenerator = require('../helper/tokengenerator')
 
 const userController = {
     register : async (req,res) => {
@@ -15,6 +16,8 @@ const userController = {
        try{
             const {email , password } = req.body;
             const user = await userService.login(email,password);
+            const jwt_token = tokeGenerator(user.id , user.email , user.role)
+            res.cookie('user-token' , jwt_token , { httpOnly: true , path: '/user' ,maxAge : 60 * 60 * 1000 })
             res.status(200).json({msg : 'success' , user})
        }catch(error){
             res.status(500).json({errorMessage : error.message})
@@ -32,7 +35,18 @@ const userController = {
         }
     },
 
-     googleSignIn: async (req, res) => {
+    addUserPassword : async (req,res) => {
+       try {
+            const { password } = req.body
+            const id = req.params.id
+            const user = await userService.addUserPassword(id,password)
+            res.status(200).json({msg : 'success' , user}) 
+       } catch (error) {
+            res.status(500).json({errorMessage : error.message})
+       }
+    },
+
+    googleSignIn: async (req, res) => {
         try {
             const { token } = req.body; // frontend sends Google JWT
             const { user, appToken } = await userService.googleSignIn(token);

@@ -34,7 +34,21 @@ const adminService = {
             throw new Error('password does not correct');
         }
         return exitUser;
-    }
+    },
+
+    createCourse : async (course_data) => {
+        try {
+            const createdCourse = await prisma.course.create({
+            data : {
+                ...course_data
+            }
+        })
+        return createdCourse;
+        } catch (error) {
+            console.log(error);
+        }
+        
+    } 
 }
 
 module.exports = adminService

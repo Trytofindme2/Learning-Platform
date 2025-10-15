@@ -33,6 +33,19 @@ model Student {
   role      Role     @default(STUDENT)
 }
 
+model Course {
+  id           String         @id @default(uuid())
+  title        String
+  language     String
+  description  String
+  price  Int
+  isPremium    Boolean     @default(false)
+  videoCount   Int         @default(0)
+  pointsEarned Int         @default(50) 
+  createdAt    DateTime    @default(now())
+}
+
+
   enum Role {
     STUDENT
     ADMIN
