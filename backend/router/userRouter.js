@@ -4,6 +4,7 @@ const { body } = require('express-validator')
 const { PrismaClient } = require('../generated/prisma')
 const prisma = new PrismaClient()
 const expressValidator = require('../middleware/expressValidator')
+const { upload } = require('../helper/imageUpload') 
 const userRouter = express.Router()
 
 userRouter.post('/register',[
@@ -42,7 +43,15 @@ userRouter.put('/update-password/:id',[
      body('password').notEmpty().withMessage('password needs to provide').isLength({min : 6}).withMessage('password must be at least 6 characters long')
 ],expressValidator , userController.addUserPassword)
 
-userRouter.patch('/addUserInfo/:id',userController.addUserInfo)
+userRouter.patch('/addUserInfo/:id',(req, res, next) => {
+    upload.single('photo')(req, res, (err) => {
+      if (err) {
+        return res.status(400).json({ errorMessage: err.message });
+      }
+      next();
+    });
+  },expressValidator,userController.addUserInfo)
+
 
 userRouter.post('/google', userController.googleSignIn);
 

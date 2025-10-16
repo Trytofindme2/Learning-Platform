@@ -21,7 +21,7 @@ const Form = ({ closeFun }) => {
       const response = await userAPI.post('log-in', data)
       if(response.status === 200){
         console.log(response.data);
-        dispatch({type : 'user-log-in' , payload : response.data })
+        dispatch({type : 'user-log-in' , payload : response.data.user })
         closeFun()
       }
     } catch (error) {

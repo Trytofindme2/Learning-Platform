@@ -24,17 +24,6 @@ const userController = {
        }
     },
 
-    addUserInfo : async (req,res) => {
-        try {
-            const data = { ...req.body }
-            const id = req.params.id
-            const user = await userService.addUserInfo(id, data)
-            res.status(200).json({msg : 'success' , user})
-        } catch (error) {
-            res.status(500).json({errorMessage : error.message})
-        }
-    },
-
     addUserPassword : async (req,res) => {
        try {
             const { password } = req.body
@@ -59,7 +48,34 @@ const userController = {
         } catch (error) {
             res.status(401).json({ errorMessage: error.message });
         }
-    }
+    },
+
+    upload : async (req,res) => {
+        try {
+            let user_id = req.params.id;
+            let user = await userService.addUserInfo(user_id,{
+                'avatar' : req.file.filename
+            })
+            return res.status(200).json({msg : 'success upload' , user})
+        } catch (error) {
+            console.log(error);
+            return res.status(400).json({errorMessage : error.message})
+        }
+    },
+
+     addUserInfo : async (req,res) => {
+        try {
+            const data = { ...req.body }
+            const id = req.params.id
+            if (req.file){
+                data.avatar = req.file.filename
+            }
+            const user = await userService.addUserInfo(id, data)
+            res.status(200).json({msg : 'success' , user})
+        } catch (error) {
+            res.status(500).json({errorMessage : error.message})
+        }
+    },
 
     
 }

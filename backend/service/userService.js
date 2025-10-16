@@ -45,7 +45,6 @@ const userService = {
         where: { id },
         data: {
             ...info,
-            
             birthday: info.birthday ? new Date(info.birthday) : null,
         },
         });

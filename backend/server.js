@@ -16,6 +16,7 @@ server.use(cors({
 }));
 
 server.use(cookieParser())
+server.use(express.static('public'))
 
 server.use(express.json())
 
