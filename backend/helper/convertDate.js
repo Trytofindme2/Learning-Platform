@@ -1,7 +1,6 @@
 const convertDate = (input) => {
   if (!input) return null;
 
-  // Accept YYYY-MM-DD format
   const parts = input.includes("-") ? input.split("-") : input.split("/");
   if (parts.length !== 3) return null;
 

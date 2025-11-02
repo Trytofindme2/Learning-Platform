@@ -16,8 +16,8 @@ const userController = {
        try{
             const {email , password } = req.body;
             const user = await userService.login(email,password);
-            const jwt_token = tokeGenerator(user.id , user.email , user.role)
-            res.cookie('user-token' , jwt_token , { httpOnly: true , path: '/user' ,maxAge : 60 * 60 * 1000 })
+            const user_token = tokeGenerator(user.id , user.email , user.role)
+            res.cookie('user-token' , user_token , { httpOnly: true , path: '/user' ,maxAge : 60 * 60 * 1000 })
             res.status(200).json({msg : 'success' , user})
        }catch(error){
             res.status(500).json({errorMessage : error.message})
@@ -37,9 +37,9 @@ const userController = {
 
     googleSignIn: async (req, res) => {
         try {
-            const { token } = req.body; // frontend sends Google JWT
+            const { token } = req.body; 
             const { user, appToken } = await userService.googleSignIn(token);
-
+            res.cookie('user-token',appToken,{ httpOnly: true , path: '/user' ,maxAge : 60 * 60 * 1000 })
             res.status(200).json({
                 msg: 'Google Sign-In success',
                 user,
@@ -47,19 +47,6 @@ const userController = {
             });
         } catch (error) {
             res.status(401).json({ errorMessage: error.message });
-        }
-    },
-
-    upload : async (req,res) => {
-        try {
-            let user_id = req.params.id;
-            let user = await userService.addUserInfo(user_id,{
-                'avatar' : req.file.filename
-            })
-            return res.status(200).json({msg : 'success upload' , user})
-        } catch (error) {
-            console.log(error);
-            return res.status(400).json({errorMessage : error.message})
         }
     },
 
@@ -76,6 +63,14 @@ const userController = {
             res.status(500).json({errorMessage : error.message})
         }
     },
+
+    log_out: (req, res) => {
+        res.clearCookie('user-token', {
+            httpOnly: true,
+            path: '/user'
+        });
+        return res.status(200).json({ msg: 'log-out successfully' });
+    }
 
     
 }

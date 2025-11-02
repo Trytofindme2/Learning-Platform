@@ -1,4 +1,5 @@
 const adminService = require('../service/adminService')
+const tokenGenerator = require('../helper/tokengenerator')
 
 const adminController = {
     
@@ -16,6 +17,8 @@ const adminController = {
        try{
             const { email , password } = req.body;
             const admin = await adminService.login(email,password);
+            const token = tokenGenerator(admin.id,admin.email,admin.role)
+            res.cookie('admin-token' , token , { httpOnly: true , path: '/admin' ,maxAge : 60 * 60 * 1000 })
             res.status(200).json({msg : 'success' , admin})
        }catch(error){
             res.status(500).json({errorMessage : error.message})

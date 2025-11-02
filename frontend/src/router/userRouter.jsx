@@ -10,6 +10,7 @@ import Courses from "../pages/user/Courses";
 import Community from "../pages/user/Community";
 import Practice from "../pages/user/Practice";
 import Contact from "../pages/user/Contact";
+import Profile from "../pages/user/profile";
 
 const userRouter = [
     {
@@ -39,6 +40,10 @@ const userRouter = [
             {
                 path : 'contact',
                 element : <Contact/>
+            },
+            {
+                path : 'profile/:id',
+                element : <Profile/>
             },
             {
                 path : 'updateInfo',

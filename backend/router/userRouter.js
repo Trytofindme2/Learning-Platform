@@ -4,6 +4,7 @@ const { body } = require('express-validator')
 const { PrismaClient } = require('../generated/prisma')
 const prisma = new PrismaClient()
 const expressValidator = require('../middleware/expressValidator')
+const AuthValidator = require('../middleware/AuthValidator')
 const { upload } = require('../helper/imageUpload') 
 const userRouter = express.Router()
 
@@ -50,9 +51,11 @@ userRouter.patch('/addUserInfo/:id',(req, res, next) => {
       }
       next();
     });
-  },expressValidator,userController.addUserInfo)
+  },expressValidator,AuthValidator,userController.addUserInfo)
 
 
 userRouter.post('/google', userController.googleSignIn);
+
+userRouter.post('/log-out',userController.log_out)
 
 module.exports = userRouter;
